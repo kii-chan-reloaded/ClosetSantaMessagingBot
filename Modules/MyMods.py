@@ -43,6 +43,7 @@ def loadArray(full_file_path):
 	with open(full_file_path,"r") as f:
 		reader = csv.reader(f)
 		SantaList = []
+		removeHeader = reader.next()
 		for row in reader:
 			SantaList.append(row)
 	return SantaList
