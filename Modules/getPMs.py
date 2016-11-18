@@ -51,12 +51,12 @@ def readMail(mail):
 		msg=("Hello /u/"+sender+"!\n\nI was unable to read your message. "
 			"This means the formatting of your message was off somehow. "
 			"The supplied links below have the proper formatting already "
-			"set up, so use one of those if you did not before. "
+			"set up, so try using one of those if you did not before. "
 			"Message the /r/ClosetSanta mods if you feel there is a problem. "
 			"Include this ID number in your message: "+ID+botFlair)
 		mail.reply(msg)
 		wrap("Non-conformant mail message detected. Saved as "+ID+".txt. /u/"+sender+" notified.")
-		return None ## Skips the rest of this function
+		return False ## Skips the rest of this function
 	if message[0] == ' ': ## Removes leading space if it exists
 		message = message[1:]
 	if sender not in (x[0] for x in SantaList):
@@ -69,8 +69,8 @@ def readMail(mail):
 			"Message the /r/ClosetSanta mods if you feel there is a problem. "
 			"Include this ID number in your message: "+ID+botFlair)
 		mail.reply(msg)
-		wrap("Message received from user not in SantaList.csv. Saved as "+ID+".txt. Maybe I need to be restarted?")
-		return None
+		wrap("Message received from user not in SantaList.csv. Saved as "+ID+".txt. Maybe the SantaList.csv was updated and I need to be restarted?")
+		return False
 	recipient,anonMail = lookupRecipient(direction.lower(),mail) ## Find the recipient account and starts building the anonymous message
 	anonMail = anonMail+message
 	ID = str(mktime(gmtime()))[:-2]
@@ -80,6 +80,7 @@ def readMail(mail):
 	anonMail = "Hello /u/"+recipient+"!\n\n"+anonMail+"\n****\nIf you feel the need to report this message, [click here]("+PMLink+URLSyntax('Report:'+ID+"\n\nReason: ")+")"+botFlair
 	reddit.send_message(recipient,"Closet Santa message",anonMail,captcha=None)
 	sleep(1) ## Ensures a different ID for each message, although it's probably not necessary.
+	return True
 
 def reportMessage(ID,Body,mail):
 	try:
@@ -90,13 +91,15 @@ def reportMessage(ID,Body,mail):
 					"\n****\nThe recipient gave the following reason:"+str(reason))
 			wrap(msg)
 			reddit.send_message("/r/ClosetSanta","Reported interaction",msg,captcha=None)
+			return True
 	except: ## This means that they messed with the ID number, or the archived message was deleted.
 		newID = str(mktime(gmtime()))[:-2]
 		with open(MYDIR+'/MessageArchive/'+newID+'.txt','w') as msg:
 			msg.write('from: /u/'+str(force_utf8(mail.author))+"\n\n****\n"+Body)
 		msg = "I received a report from /u/"+str(force_utf8(mail.author))+" about the message ID "+ID+", but that ID is not in my message archive. The full report message was saved as "+newID+".txt"
 		reddit.send_message("/r/ClosetSanta","Reported interaction",msg,captcha=None)
-		wrap("Non-conformant mail message detected- Reported message not found. Report was saved as "+newID+".txt")
+		wrap("Non-conformant report message detected- Reported message not found. Report was saved as "+newID+".txt")
+		return False
 
 def lookupRecipient(direction,mail):
 	sender = str(force_utf8(mail.author))
@@ -118,5 +121,7 @@ def getPMs():
 		newFirst.append(mail)
 	oldFirst = newFirst[::-1]
 	for mail in enumerate(oldFirst):
-		readMail(mail)
+		success = readMail(mail)
+		if success:
+			mail.reply('Your message was successfully sent'+botFlair)
 		mail.delete() ## Delete the message from account for privacy reasons
