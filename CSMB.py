@@ -90,5 +90,9 @@ if __name__ == '__main__':
 	print "\n"
 	wrap(greeting)
 	while True:
-		getPMs.getPMs()
-		sleep(BOTFREQUENCY)
+		try:
+			getPMs.getPMs()
+			sleep(BOTFREQUENCY)
+		except requests.exceptions.ConnectionError,e:
+			wrap("Looks like I'm having internet connection issues. I will try again in ten minutes.\n\nError details: "+str(e.args))
+			sleep(600)
