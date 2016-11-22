@@ -93,6 +93,6 @@ if __name__ == '__main__':
 		try:
 			getPMs.getPMs()
 			sleep(BOTFREQUENCY)
-		except requests.exceptions.ConnectionError,e:
+		except Exception as e:
 			wrap("Looks like I'm having internet connection issues. I will try again in ten minutes.\n\nError details: "+str(e.args))
 			sleep(600)
