@@ -43,7 +43,7 @@ try:
 	mod='OAuth2Util'
 	import OAuth2Util
 	mod='time'
-	from time import sleep
+	from time import sleep,time
 except:
 	print "Module '"+mod+"'not found!\nInstall the python module '"+mod+"' and try again."
 	exit()
@@ -91,8 +91,11 @@ if __name__ == '__main__':
 	wrap(greeting)
 	while True:
 		try:
+			begin = time()
 			getPMs.getPMs()
-			sleep(BOTFREQUENCY)
+			end = time()
+			if int(end-begin) < BOTFREQUENCY:
+				sleep(BOTFREQUENCY-int(end-begin))
 		except Exception as e:
 			wrap("Looks like I'm having internet connection issues. I will try again in ten minutes.\n\nError details: "+str(e.args))
 			sleep(600)
