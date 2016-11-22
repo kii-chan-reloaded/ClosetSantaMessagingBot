@@ -116,7 +116,7 @@ def lookupRecipient(direction,mail):
 		
 def getPMs():
 	newFirst=[] ## Praw's iterater goes from newest to oldest; this flips it. Just seems more fair to do oldest first idk.
-	for mail in reddit.get_unread(unset_has_mail=True, update_user=True, limit = 100):
+	for mail in reddit.get_unread(unset_has_mail=True, update_user=True, limit=None):
 		## Fill the array with all mail objects
 		newFirst.append(mail)
 	oldFirst = newFirst[::-1]
