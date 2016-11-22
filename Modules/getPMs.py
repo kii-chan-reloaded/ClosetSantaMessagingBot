@@ -26,7 +26,7 @@ from __main__ import MYDIR,MYNAME,ACCOUNT,reddit,PMLink,botFlair,SantaList
 from MyMods import *
 
 from re import search,finditer
-from time import mktime,gmtime,sleep
+from time import sleep,time
 import praw
 
 def readMail(mail):
@@ -45,7 +45,7 @@ def readMail(mail):
 		direction = search('(?i)(to:|from:) santa.*',Body).group(1)
 		message = Body[finditer('(?im)message:',Body).next().end():]
 	except:
-		ID = str(mktime(gmtime()))[:-2]
+		ID = str(int(time()))[:-2]
 		with open(MYDIR+'/MessageArchive/'+ID+'.txt','w') as msg:
 			msg.write('from: /u/'+sender+"\n\n****\n"+Body)
 		msg=("Hello /u/"+sender+"!\n\nI was unable to read your message. "
@@ -60,7 +60,7 @@ def readMail(mail):
 	if message[0] == ' ': ## Removes leading space if it exists
 		message = message[1:]
 	if sender not in (x[0] for x in SantaList):
-		ID = str(mktime(gmtime()))[:-2] ##Assigns unique ID based on epoch time
+		ID = str(int(time()))[:-2] ##Assigns unique ID based on epoch time
 		with open(MYDIR+'/MessageArchive/'+ID+'.txt','w') as msg: ## Saves to unique file
 			msg.write('from: /u/'+sender+"\n\n****\n"+message)
 		msg=("Hello /u/"+sender+"!\n\nI was unable to find your account in my "
@@ -73,7 +73,7 @@ def readMail(mail):
 		return False
 	recipient,anonMail = lookupRecipient(direction.lower(),mail) ## Find the recipient account and starts building the anonymous message
 	anonMail = anonMail+message
-	ID = str(mktime(gmtime()))[:-2]
+	ID = str(int(time()))[:-2]
 	with open(MYDIR+'/MessageArchive/'+ID+'.txt','w') as msg:
 		msg.write('from: /u/'+sender+"\n\nto: /u/"+recipient+"\n\n****\n"+message)
 	## Build message and add report link
@@ -93,7 +93,7 @@ def reportMessage(ID,Body,mail):
 			reddit.send_message("/r/ClosetSanta","Reported interaction",msg,captcha=None)
 			return True
 	except: ## This means that they messed with the ID number, or the archived message was deleted.
-		newID = str(mktime(gmtime()))[:-2]
+		newID = str(int(time()))[:-2]
 		with open(MYDIR+'/MessageArchive/'+newID+'.txt','w') as msg:
 			msg.write('from: /u/'+str(force_utf8(mail.author))+"\n\n****\n"+Body)
 		msg = "I received a report from /u/"+str(force_utf8(mail.author))+" about the message ID "+ID+", but that ID is not in my message archive. The full report message was saved as "+newID+".txt"
@@ -115,13 +115,8 @@ def lookupRecipient(direction,mail):
 		return recipient,anonMail
 		
 def getPMs():
-	newFirst=[] ## Praw's iterater goes from newest to oldest; this flips it. Just seems more fair to do oldest first idk.
 	for mail in reddit.get_unread(unset_has_mail=True, update_user=True, limit=None):
-		## Fill the array with all mail objects
-		newFirst.append(mail)
-	oldFirst = newFirst[::-1]
-	for mail in enumerate(oldFirst):
 		success = readMail(mail)
 		if success:
-			mail.reply('Your message was successfully sent'+botFlair)
-		mail.delete() ## Delete the message from account for privacy reasons
+			mail.reply('Your message was successfully sent!'+botFlair)
+		mail.mark_as_read()
