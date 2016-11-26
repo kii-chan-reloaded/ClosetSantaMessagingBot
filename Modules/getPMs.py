@@ -22,7 +22,7 @@ The important parts of this code were derived from /u/RemindMeBotWrangler's remi
 https://github.com/SIlver--/remindmebot-reddit/blob/master/remindmebot_search.py
 """
 
-from __main__ import MYDIR,MYNAME,ACCOUNT,reddit,PMLink,botFlair,SantaList
+from __main__ import MYDIR,reddit,PMLink,botFlair,SantaList
 from MyMods import *
 
 from re import search,finditer
