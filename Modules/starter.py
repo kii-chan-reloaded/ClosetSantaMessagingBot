@@ -58,10 +58,12 @@ def checkForFiles():
 		makeOAuth(ID,SECRET)
 	elif not open(MYDIR+"/MyFiles/oauth.ini","r").read():
 		makeOAuth(ID,SECRET)
-	elif not path.exists(MYDIR+"/SantaList.csv"):
+	if not path.exists(MYDIR+"/SantaList.csv"):
 		wrap("I do not see a \"SantaList.csv\" file in my home directory ("+MYDIR+"). "
 			"This is fatal. Exiting...")
 		exit()
+	if not path.exists(MYDIR+'/MessageArchive'):
+		mkdir(MYDIR+'/MessageArchive')
 
 def loadAccount():
 	"""
@@ -75,6 +77,10 @@ def loadAccount():
 		ID = creds[1].replace("ID:","")
 		global SECRET
 		SECRET = creds[2].replace("SECRET:","")
+		## Remove leading space if it exists
+		for variable in ['ACCOUNT', 'ID', 'SECRET']:
+			if eval(variable)[0] == " ":
+				exec(variable+"="+eval(variable)[1:])
 		if ACCOUNT == "":
 			warn =("I don't have my account name listed, so I can't "
 				"sign in. Please, enter my account credentials in the "
@@ -153,7 +159,7 @@ def makeAccount():
 
 def firstTime():
 	"""
-	Launches if the directory isn't found. Greets the user with a 
+	Launches if the placeholder isn't found. Greets the user with a 
 	pleasant message, makes the required files, then exits
 	"""
 	greeting = ("Hello! My name is "+MYNAME+" - it's nice to meet you! "
@@ -174,6 +180,7 @@ def account():
 	with open(MYDIR+'/MyAccount.cfg','r') as cfg:
 		cfg=cfg.read()
 		creds=cfg.splitlines()
-		index=0
-		ACCOUNT = creds[index].replace("USERNAME:","")
+		ACCOUNT = creds[0].replace("USERNAME:","")
+		if ACCOUNT[0] == " ":
+			ACCOUNT=ACCOUNT[1:]
 		return ACCOUNT
