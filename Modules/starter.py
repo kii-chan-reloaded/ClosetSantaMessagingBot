@@ -46,6 +46,10 @@ def checkForFiles():
 	"""
 	Checks to make sure all necessary files and folders exist.
 	"""
+	if not path.exists(MYDIR+'/MessageArchive'):
+		mkdir(MYDIR+'/MessageArchive')
+	if not path.exists(MYDIR+'/MyFiles'):
+		mkdir(MYDIR+'/MyFiles')
 	if not path.exists(MYDIR+'/MyFiles/'+MYNAME+'.placeholder'):
 		with open(MYDIR+'/MyFiles/'+MYNAME+'.placeholder','w') as f:
 			f.write('This is a placeholder to signify that the bot has been loaded before. Do not delete this file.')
@@ -62,8 +66,6 @@ def checkForFiles():
 		wrap("I do not see a \"SantaList.csv\" file in my home directory ("+MYDIR+"). "
 			"This is fatal. Exiting...")
 		exit()
-	if not path.exists(MYDIR+'/MessageArchive'):
-		mkdir(MYDIR+'/MessageArchive')
 
 def loadAccount():
 	"""
