@@ -87,6 +87,8 @@ if __name__ == '__main__':
 	greeting = "\n"+MYNAME+", reporting for duty!\n I will be using the account /u/"+ACCOUNT
 	print "\n"
 	wrap(greeting)
+	print "From Santa link: "+PMLink+URLSyntax('From: Santa-san\n\nMessage: ')
+	print "To Santa link: "+PMLink+URLSyntax('To: Santa-san\n\nMessage: ')
 	while True:
 		try:
 			begin = time()
