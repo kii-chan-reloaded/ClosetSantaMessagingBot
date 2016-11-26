@@ -20,10 +20,10 @@
 #    Globals    #
 #################
 
-BOTMASTER = ""                  # Your personal reddit account goes here
+BOTMASTER = ""						# Your personal reddit account goes here
 
-MYNAME = "ClosetSantaPostman"   # Can be different from the bot's account name
-BOTFREQUENCY = 120              # Time in seconds between refreshes
+MYNAME = "Closet Stanta Postman"	# Can be different from the bot's account name
+BOTFREQUENCY = 120					# Time in seconds between refreshes
 
 # Also change botFlair below if you wish
 
@@ -97,5 +97,5 @@ if __name__ == '__main__':
 			if int(end-begin) < BOTFREQUENCY:
 				sleep(BOTFREQUENCY-int(end-begin))
 		except Exception as e:
-			wrap("Looks like I'm having internet connection issues. I will try again in ten minutes.\n\nError details: "+str(e.args))
-			sleep(600)
+			wrap("Looks like I'm having internet connection issues. I will try again in 5 minutes.\n\nError details: "+str(e.args))
+			sleep(300)
