@@ -104,13 +104,13 @@ def reportMessage(ID,Body,mail):
 def lookupRecipient(direction,mail):
 	sender = str(force_utf8(mail.author))
 	if direction.lower() == "to:":
-		#Look up user's Closet Santa (column 1 of csv)
-		recipient = [santa for (user,santa) in SantaList if user == sender][0]
+		#Look up user's Closet Santa (column B of csv)
+		recipient = [santa for (user,santa) in SantaList if user.lower() == sender.lower()][0]
 		anonMail = "You have received a message from your gift recipient!\n****\n"
 		return recipient,anonMail
 	else:
-		#Look up user's recipient (column 0 of csv)
-		recipient = [user for (user,santa) in SantaList if santa == sender][0]
+		#Look up user's recipient (column A of csv)
+		recipient = [user for (user,santa) in SantaList if santa.lower() == sender.lower()][0]
 		anonMail = "You have received a message from your Closet Santa!\n****\n"
 		return recipient,anonMail
 		
