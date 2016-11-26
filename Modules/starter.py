@@ -142,7 +142,6 @@ def makeOAuth(ID,SECRET):
 				"login.\n NOTE: You may want to edit the scope if I don't "
 				"have my own dedicated account.")
 			wrap(warn)
-		exit()
 
 def makeAccount():
 	"""
