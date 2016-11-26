@@ -37,13 +37,11 @@ try:
 	mod='sys'
 	from sys import path as moduleDir
 	mod="time"
-	from time import strftime,mktime,gmtime
+	from time import sleep,time
 	mod='praw'
 	import praw
 	mod='OAuth2Util'
 	import OAuth2Util
-	mod='time'
-	from time import sleep,time
 except:
 	print "Module '"+mod+"'not found!\nInstall the python module '"+mod+"' and try again."
 	exit()
