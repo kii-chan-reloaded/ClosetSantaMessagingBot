@@ -35,7 +35,7 @@ def readMail(mail):
 	sends mail accordingly to the appropriate parties.
 	"""
 	Body = force_utf8(mail.body) ## Convert message to utf8 just in case
-	sender = str(force_utf8(mail.author)) ## Same deal
+	sender = str(force_utf8(mail.author)).lower() ## Same deal
 	report = search('(?i)report:(.*)',Body)
 	## Check if the report call was used.
 	## Sends modmail with copy of message if yes
@@ -59,7 +59,7 @@ def readMail(mail):
 		return False ## Skips the rest of this function
 	if message[0] == ' ': ## Removes leading space if it exists
 		message = message[1:]
-	if sender not in (x[0] for x in SantaList):
+	if sender not in (x[0].lower() for x in SantaList):
 		ID = str(int(time()))[:-2] ##Assigns unique ID based on epoch time
 		with open(MYDIR+'/MessageArchive/'+ID+'.txt','w') as msg: ## Saves to unique file
 			msg.write('from: /u/'+sender+"\n\n****\n"+message)
